@@ -1,19 +1,18 @@
 import { Router } from 'express';
 import { accountRouter } from './account.route';
-import { notFoundPathHandler } from '../middleware/not-found-path.middleware';
-import { globalErrorHandler } from '../middleware/global-error.middleware';
 import { artistRouter } from './artist.route';
+import { eventRouter } from './event.route';
+import { authenticate } from '../middleware/auth.middleware';
+import { venueRouter } from './venue.route';
+import { bookingRouter } from './booking.route';
 
 const router = Router();
-router.use((req, res, next) => {
-  console.log(new Date(), req.method, req.originalUrl);
-  next();
-});
 
 router.use('/account', accountRouter);
-router.use('/artist', artistRouter);
-
-router.use('*', notFoundPathHandler);
-router.use(globalErrorHandler);
+router.use(authenticate);
+router.use('/artists', artistRouter);
+router.use('/events', eventRouter);
+router.use('/venues', venueRouter);
+router.use('/bookings', bookingRouter);
 
 export const mainRouter = router;

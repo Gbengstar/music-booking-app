@@ -3,7 +3,7 @@ import { Types } from 'mongoose';
 export interface IEvent {
   title: string;
   description: string;
-  artist: Types.ObjectId;
+  artists: Types.ObjectId[];
   venue: Types.ObjectId;
   date: Date;
   startTime: string;

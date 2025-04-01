@@ -8,14 +8,7 @@ const router = Router();
 
 const artistController = Container.get(ArtistController);
 
-router.use(authenticate, authorizeRoles(RolesEnum.USER));
-
-router
-  .route('/availability')
-  .post(artistController.addAvailability)
-  .patch(artistController.addAvailability);
-
-router.route('/availability/:id').delete(artistController.removeAvailability);
+router.use(authenticate, authorizeRoles(RolesEnum.ARTIST, RolesEnum.ADMIN));
 
 router
   .route('/')

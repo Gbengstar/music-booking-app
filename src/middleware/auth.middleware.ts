@@ -11,8 +11,7 @@ export const authenticate = async (
   const token = getToken(req);
   if (!token) {
     return res.status(401).json({
-      status: 'Failed',
-      type: 'Unauthorized',
+      status: 'FAILED',
       message: 'Access denied. No token provided.',
     });
   }
@@ -30,8 +29,7 @@ export const authorizeRoles = (...roles: RolesEnum[]) => {
   return async (req: IRequest, res: Response, next: NextFunction) => {
     if (!roles.includes(req.auth.role)) {
       return res.status(403).json({
-        status: 'Failed',
-        type: 'Unauthorized',
+        status: 'FAILED',
         message: 'Access denied. Insufficient privileges.',
       });
     }

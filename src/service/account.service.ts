@@ -6,13 +6,15 @@ import { RolesEnum } from '../dto/role.dto';
 import { IAccount } from '../interface/account.interface';
 import { compareHashedValue, hashValue } from '../helper/hash-value.helper';
 import { signToken } from '../helper/token.helper';
+import { CustomError } from '../helper/error.helper';
+import { HttpStatusCode } from '../enum/http-status.enum';
 
 @Service()
 export class AccountService {
   async signUpUserAccount(userData: SignUpDto): Promise<IAccount> {
     const userExist = await AccountModel.exists({ email: userData.email });
     if (userExist) {
-      throw new Error('User already exist');
+      throw new CustomError(HttpStatusCode.BAD_REQUEST, 'User already exist');
     }
 
     const password = await hashValue(userData.password);
@@ -24,7 +26,7 @@ export class AccountService {
     const account = await AccountModel.findOne(filter);
 
     if (!account) {
-      throw new Error('Account not found');
+      throw new CustomError(HttpStatusCode.NOT_FOUND, 'Account not found');
     }
 
     return account;
@@ -34,13 +36,19 @@ export class AccountService {
     const account = await AccountModel.findOne({ email });
 
     if (!account) {
-      throw new Error('Invalid email or password');
+      throw new CustomError(
+        HttpStatusCode.UNAUTHENTICATED,
+        'Invalid email or password'
+      );
     }
 
     const isValid = await compareHashedValue(password, account.password);
 
     if (!isValid) {
-      throw new Error('Invalid email or password');
+      throw new CustomError(
+        HttpStatusCode.UNAUTHENTICATED,
+        'Invalid email or password'
+      );
     }
 
     const token = await signToken({
@@ -55,6 +63,6 @@ export class AccountService {
 
   async allUsers() {
     //Paginate user
-    return await AccountModel.find({ role: RolesEnum.USER });
+    return await AccountModel.find({});
   }
 }

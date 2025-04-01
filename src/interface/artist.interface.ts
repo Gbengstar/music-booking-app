@@ -1,9 +1,4 @@
 import { Types } from 'mongoose';
-export interface IArtistAvailability {
-  startDate: Date;
-  endDate: Date;
-  booked: boolean;
-}
 
 export interface IArtist {
   user: Types.ObjectId;
@@ -18,9 +13,6 @@ export interface IArtist {
     twitter: string;
     youtube: string;
   };
-  performanceFee: number;
   photos: string[];
   demoLinks: string[];
-  equipmentNeeds: string;
-  availability: IArtistAvailability[];
 }

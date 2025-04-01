@@ -6,22 +6,25 @@ import cors from 'cors';
 import { connectDatabase } from './helper/database-connector';
 import { mainRouter } from './route';
 import { globalErrorHandler } from './middleware/global-error.middleware';
+import { notFoundPathHandler } from './middleware/not-found-path.middleware';
+import { envConfigValidator } from './validator/env.validator';
+import { validate } from './helper/validator.helper';
+import { requestLogger } from './middleware/request-logger.middleware';
 
 async function app(): Promise<void> {
   dotenv.config();
   const app = express();
   app.use(cors());
   app.use(express.json());
+  app.use(requestLogger);
+  app.use('/api/v1', mainRouter);
+  app.use('*', notFoundPathHandler);
+  app.use(globalErrorHandler);
 
-  app.use('/', mainRouter);
-
+  const env = await validate(envConfigValidator, process.env);
   await connectDatabase();
-  const PORT = process.env.PORT;
-  if (!PORT) {
-    throw new Error('Port is required to start up server');
-  }
-  app.listen(PORT, () => {
-    console.log('App is ready to receive requests on port: ', PORT);
+  app.listen(env.PORT, () => {
+    console.log('App is ready to receive requests on port: ', env.PORT);
   });
 }
 

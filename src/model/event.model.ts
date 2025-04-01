@@ -5,8 +5,8 @@ const eventSchema = new Schema<IEvent>(
   {
     title: { type: String, required: true },
     description: { type: String },
-    artist: {
-      type: Schema.Types.ObjectId,
+    artists: {
+      type: [Schema.Types.ObjectId],
       ref: 'Artist',
       required: true,
     },
@@ -37,4 +37,4 @@ const eventSchema = new Schema<IEvent>(
   { timestamps: true }
 );
 
-export const EventModel = model('Event', eventSchema, 'event');
+export const EventModel = model('Event', eventSchema);

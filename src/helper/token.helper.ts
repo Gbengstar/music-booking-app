@@ -2,6 +2,8 @@ import * as jwt from 'jsonwebtoken';
 import { EnvConfigEnum } from '../enum/env-configuration.enum';
 import { Request } from 'express';
 import { IAuth } from '../interface/token.interface';
+import { CustomError } from './error.helper';
+import { HttpStatusCode } from '../enum/http-status.enum';
 
 export const signToken = (tokenObj: IAuth): Promise<string> => {
   const tokenSecret = process.env[EnvConfigEnum.TOKEN_SECRET];
@@ -13,23 +15,8 @@ export const signToken = (tokenObj: IAuth): Promise<string> => {
       tokenSecret,
       { expiresIn },
       (err: any, encoded: string) => {
-        if (err) reject(new Error(err));
+        if (err) reject(new CustomError(403, err.message));
         resolve(encoded);
-      }
-    );
-  });
-};
-
-export const verifyExpiredToken = (token: string) => {
-  return new Promise((resolve, reject) => {
-    const tokenSecret = process.env[EnvConfigEnum.TOKEN_SECRET];
-    jwt.verify(
-      token,
-      tokenSecret,
-      { ignoreExpiration: true },
-      (err: any, decoded) => {
-        if (err) reject(new Error(err.message));
-        resolve(decoded);
       }
     );
   });
@@ -46,7 +33,9 @@ export const refreshToken = ({
     const tokenSecret = process.env[EnvConfigEnum.REFRESH_TOKEN_SECRET];
 
     jwt.sign({ id }, tokenSecret, { expiresIn }, (err, decoded) => {
-      if (err) reject(new Error(err));
+      if (err) {
+        reject(new CustomError(HttpStatusCode.FORBIDDEN, err.message));
+      }
 
       resolve(decoded);
     });
@@ -59,7 +48,7 @@ export const verifyRefreshToken = async (token: string): Promise<any> => {
     const decoded = await jwt.decode(token, tokenSecret);
     return decoded;
   } catch (err) {
-    throw new Error(err);
+    throw new CustomError(403, err.message);
   }
 };
 
@@ -70,9 +59,9 @@ export const verifyToken = (token: string): Promise<IAuth> => {
     jwt.verify(token, tokenSecret, (err: Error, data: any) => {
       if (err) {
         if (err.name === 'TokenExpiredError') {
-          reject(new Error('Token expired'));
+          reject(new CustomError(HttpStatusCode.FORBIDDEN, 'Token expired'));
         }
-        reject(new Error(err.message));
+        reject(new CustomError(HttpStatusCode.FORBIDDEN, err.message));
       }
       resolve(data);
     });

@@ -14,17 +14,8 @@ const artistProfileSchema = new Schema<IArtist>({
     twitter: String,
     youtube: String,
   },
-  performanceFee: { type: Number, required: true },
   photos: [{ type: String }],
   demoLinks: [{ type: String }],
-  equipmentNeeds: { type: String },
-  availability: [
-    {
-      startDate: Date,
-      endDate: Date,
-      booked: { type: Boolean, default: false },
-    },
-  ],
 });
 
-export const ArtistModel = model('Artist', artistProfileSchema, 'artist');
+export const ArtistModel = model('Artist', artistProfileSchema);

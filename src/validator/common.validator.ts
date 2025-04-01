@@ -9,6 +9,8 @@ export const booleanValidator = Joi.boolean();
 
 export const numberValidator = Joi.number();
 
+export const arrayValidator = Joi.array();
+
 export const idValidator = Joi.string()
   .trim()
   .custom((value, helpers) => {

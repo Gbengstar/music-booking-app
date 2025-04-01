@@ -1,33 +1,16 @@
 import { model, Schema } from 'mongoose';
+import { IBooking } from '../interface/booking.interface';
 
-const bookingSchema = new Schema({
+const bookingSchema = new Schema<IBooking>({
   event: { type: Schema.Types.ObjectId, ref: 'Event', required: true },
-  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  artist: {
-    type: Schema.Types.ObjectId,
-    ref: 'Artist',
-    required: true,
-  },
-  venue: {
-    type: Schema.Types.ObjectId,
-    ref: 'Venue',
-    required: true,
-  },
+  user: { type: Schema.Types.ObjectId, ref: 'Account', required: true },
   tickets: { type: Number, required: true },
   totalAmount: { type: Number, required: true },
   bookingDate: { type: Date, default: Date.now },
-  status: {
-    type: String,
-    enum: ['pending', 'confirmed', 'cancelled', 'completed'],
-    default: 'pending',
-  },
-  paymentStatus: {
-    type: String,
-    enum: ['pending', 'paid', 'refunded', 'failed'],
-    default: 'pending',
-  },
+  status: { type: String },
+  paymentStatus: { type: String },
   paymentMethod: { type: String },
   transactionId: { type: String },
 });
 
-export const BookingModel = model('Booking', bookingSchema, 'booking');
+export const BookingModel = model('Booking', bookingSchema);

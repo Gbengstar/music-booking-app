@@ -5,15 +5,19 @@ import { Controller } from '../helper/controller-decorator.helper';
 import { ResponseHandler } from '../helper/response.helper';
 import { EventService } from '../service/event.service';
 import { createEventValidator } from '../validator/event.validator';
+import { IRequest } from '../interface/request.interface';
 
 @Service()
 @Controller()
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
-  async createEvent(req: Request, res: Response) {
+  async createEvent(req: IRequest, res: Response) {
     const eventData = await validate(createEventValidator, req.body);
-    const newEvent = await this.eventService.createEvent(eventData);
+    const newEvent = await this.eventService.createEvent(
+      req.auth.id,
+      eventData
+    );
 
     ResponseHandler.created(res, newEvent);
   }
