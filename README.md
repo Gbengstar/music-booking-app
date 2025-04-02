@@ -29,8 +29,8 @@
 ```env
 MONGODB_URL="mongodb+srv://gtoyewole30:PNBnDRugyfmkDFZ5@test-apps.tyf1g.mongodb.net/fobework?retryWrites=true&w=majority&appName=test-apps"
 PORT=9000
-TOKEN_SECRET="TOKEN_SECRET"
-REFRESH_TOKEN_SECRET="REFRESH_TOKEN_SECRET"
+TOKEN_SECRET="3fa85f64c3e5a1c05d4f1a2b3c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3"
+REFRESH_TOKEN_SECRET="3fa85f64c3e5a1c05d4f1a2b3c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b33fa85f64c3e5a1c05d4f1a2b3c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3"
 TOKEN_EXPIRE_IN="1 day"
 REDIS_HOST="rediss://red-cot10l2cn0vc73esl9n0:spASw7t87qRhkz8mmP1wrwYR9JjQGlJ2@oregon-redis.render.com:6379"
 ```
