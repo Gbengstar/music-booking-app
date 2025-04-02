@@ -5,8 +5,12 @@ import { Controller } from '../helper/controller-decorator.helper';
 import { ResponseHandler } from '../helper/response.helper';
 import { EventService } from '../service/event.service';
 import { IRequest } from '../interface/request.interface';
-import { createVenueValidator } from '../validator/venue.validator';
+import {
+  createVenueValidator,
+  updateVenueValidator,
+} from '../validator/venue.validator';
 import { VenueService } from '../service/venue.service';
+import { objectIdValidator } from '../validator/common.validator';
 
 @Service()
 @Controller()
@@ -20,9 +24,25 @@ export class VenueController {
     ResponseHandler.created(res, newEvent);
   }
 
+  async updateVenue(req: IRequest, res: Response) {
+    const { id, ...venueData } = await validate(updateVenueValidator, req.body);
+    const updatedEvent = await this.venueService.updateVenueData(id, venueData);
+
+    ResponseHandler.created(res, updatedEvent);
+  }
+
   async allVenues(req: Request, res: Response) {
     const events = await this.venueService.allVenues();
 
     ResponseHandler.ok(res, events);
+  }
+
+  async deleteVenue(req: IRequest, res: Response) {
+    const { id } = await validate(objectIdValidator, {
+      id: req.params.id,
+    });
+    await this.venueService.updateVenueData(id, { deleted: true });
+
+    ResponseHandler.ok(res, true);
   }
 }

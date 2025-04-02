@@ -15,4 +15,5 @@ export interface IArtist {
   };
   photos: string[];
   demoLinks: string[];
+  deleted: boolean;
 }

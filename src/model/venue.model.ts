@@ -13,11 +13,11 @@ const venueSchema = new Schema<IVenue>(
       country: String,
     },
     capacity: { type: Number },
-    venueType: { type: String },
     photos: [{ type: String }],
     amenities: [{ type: String }],
     bookingPolicies: { type: String },
     createdBy: { type: Schema.Types.ObjectId, ref: 'Account', required: true },
+    deleted: { type: Boolean, select: false, default: false },
   },
   { timestamps: true }
 );

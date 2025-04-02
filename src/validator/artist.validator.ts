@@ -5,6 +5,7 @@ import {
   stringValidator,
 } from './common.validator';
 import { IArtist } from '../interface/artist.interface';
+import { MusicGenre } from '../enum/music-genre.enum';
 
 const socialMediaValidator = Joi.object({
   facebook: stringValidator,
@@ -17,7 +18,9 @@ export const createArtistProfileValidator = Joi.object<IArtist>({
   user: stringValidator.required(),
   name: stringValidator.required(),
   bio: stringValidator.required(),
-  genres: Joi.array().items(stringValidator).min(1).required(),
+  genres: Joi.array()
+    .items(stringValidator.valid(...Object.values(MusicGenre)).min(1))
+    .required(),
   location: stringValidator.required(),
   website: stringValidator.uri().required(),
   socialMedia: socialMediaValidator,
@@ -29,7 +32,9 @@ export const updateArtistProfileValidator = Joi.object<IArtist>({
   user: stringValidator,
   name: stringValidator,
   bio: stringValidator,
-  genres: Joi.array().items(stringValidator).min(1),
+  genres: Joi.array().items(
+    stringValidator.valid(...Object.values(MusicGenre)).min(1)
+  ),
   location: stringValidator,
   website: stringValidator,
   socialMedia: socialMediaValidator,

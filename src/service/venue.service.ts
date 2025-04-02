@@ -8,7 +8,7 @@ import { HttpStatusCode } from '../enum/http-status.enum';
 
 @Service()
 export class VenueService {
-  private readonly cacheKey = 'cache-all-venues';
+  private readonly cacheKey = 'venue-cache-keys';
   constructor(private readonly cacheService: CacheService) {}
 
   async createVenue(user: string, venueData: IVenue) {
@@ -22,15 +22,21 @@ export class VenueService {
     return newVenue;
   }
 
-  updateVenue(user: string, eventData: IVenue) {
-    eventData.createdBy = new Types.ObjectId(user);
+  updateVenueData(venueId: string, eventData: Partial<IVenue>) {
+    const updatedVenue = VenueModel.findByIdAndUpdate(venueId, eventData, {
+      new: true,
+    });
 
-    return VenueModel.create(eventData);
+    if (!updatedVenue) {
+      throw new CustomError(HttpStatusCode.NOT_FOUND, 'Venue not found');
+    }
+
+    return updatedVenue;
   }
 
   async allVenues() {
     return this.cacheService.getOrLoad(this.cacheKey, async () => {
-      return VenueModel.find();
+      return VenueModel.find({ deleted: false });
     });
   }
 

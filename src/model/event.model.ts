@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 import { IEvent } from '../interface/event.interface';
+import { EventStatusEnum } from '../enum/event.enum';
 
 const eventSchema = new Schema<IEvent>(
   {
@@ -24,15 +25,15 @@ const eventSchema = new Schema<IEvent>(
     genres: [{ type: String }],
     status: {
       type: String,
-      enum: ['draft', 'published', 'cancelled'],
-      default: 'draft',
+      enum: EventStatusEnum,
     },
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Account',
       required: true,
     },
     coverImage: { type: String },
+    deleted: { type: Boolean, select: false, default: false },
   },
   { timestamps: true }
 );

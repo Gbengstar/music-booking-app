@@ -2,7 +2,12 @@ import { model, Schema } from 'mongoose';
 import { IArtist } from '../interface/artist.interface';
 
 const artistProfileSchema = new Schema<IArtist>({
-  user: { type: Schema.Types.ObjectId, ref: 'Account', required: true },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'Account',
+    required: true,
+    index: true,
+  },
   name: { type: String, required: true },
   bio: { type: String },
   genres: [{ type: String }],
@@ -16,6 +21,7 @@ const artistProfileSchema = new Schema<IArtist>({
   },
   photos: [{ type: String }],
   demoLinks: [{ type: String }],
+  deleted: { type: Boolean, select: false, default: false },
 });
 
 export const ArtistModel = model('Artist', artistProfileSchema);

@@ -7,6 +7,7 @@ import { EventService } from './event.service';
 import { FilterQuery } from 'mongoose';
 import { CustomError } from '../helper/error.helper';
 import { HttpStatusCode } from '../enum/http-status.enum';
+import { EventStatusEnum } from '../enum/event.enum';
 
 @Service()
 export class BookingService {
@@ -30,6 +31,13 @@ export class BookingService {
         _id: bookingData.event,
       });
 
+      if (event.status !== EventStatusEnum.PUBLISHED) {
+        throw new CustomError(
+          HttpStatusCode.UNPROCESSABLE_ENTITY,
+          'Event not ready to be booked'
+        );
+      }
+
       // Check ticket availability
       if (event.availableTickets < bookingData.tickets) {
         throw new CustomError(
@@ -49,6 +57,11 @@ export class BookingService {
       });
 
       event.availableTickets -= bookingData.tickets;
+
+      if (!event.availableTickets) {
+        event.status = EventStatusEnum.COMPLETED;
+      }
+
       const [newBooking] = await Promise.all([
         booking.save(),
         event.save(),

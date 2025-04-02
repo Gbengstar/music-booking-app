@@ -14,8 +14,8 @@ export interface IVenue {
   description: string;
   address: IVenueAddress;
   capacity: number;
-  venueType: string;
   photos: string[];
   amenities: string[];
   bookingPolicies: string;
+  deleted: boolean;
 }

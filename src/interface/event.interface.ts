@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import { EventStatusEnum } from '../enum/event.enum';
 
 export interface IEvent {
   title: string;
@@ -12,7 +13,8 @@ export interface IEvent {
   availableTickets: number;
   eventType: string;
   genres: string[];
-  status: 'draft' | 'published' | 'cancelled';
+  status: EventStatusEnum;
   createdBy: Types.ObjectId;
   coverImage: string;
+  deleted: boolean;
 }

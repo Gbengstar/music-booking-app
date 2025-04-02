@@ -14,6 +14,18 @@ router
     authorizeRoles(RolesEnum.ADMIN, RolesEnum.ARTIST),
     eventController.createEvent
   )
+  .patch(
+    authorizeRoles(RolesEnum.ADMIN, RolesEnum.ARTIST),
+    eventController.updateEventData
+  )
   .get(eventController.allEvents);
+
+router
+  .route('/:id/status')
+  .put(authorizeRoles(RolesEnum.ADMIN), eventController.updateEventStatus);
+
+router
+  .route('/:id')
+  .delete(authorizeRoles(RolesEnum.ADMIN), eventController.deleteEvent);
 
 export const eventRouter = router;
