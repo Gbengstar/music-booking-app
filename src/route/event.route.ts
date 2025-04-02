@@ -22,7 +22,7 @@ router
 
 router
   .route('/:id/status')
-  .put(authorizeRoles(RolesEnum.ADMIN), eventController.updateEventStatus);
+  .patch(authorizeRoles(RolesEnum.ADMIN), eventController.updateEventStatus);
 
 router
   .route('/:id')

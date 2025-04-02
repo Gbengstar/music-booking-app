@@ -12,8 +12,10 @@ router.use(authenticate, authorizeRoles(RolesEnum.ARTIST, RolesEnum.ADMIN));
 
 router
   .route('/')
-  .get(artistController.getProfile)
   .post(artistController.createProfile)
-  .patch(artistController.updateProfile);
+  .get(artistController.getProfile)
+  .put(artistController.updateProfile);
+
+router.route('/:id/events').get(artistController.getArtistEvents);
 
 export const artistRouter = router;

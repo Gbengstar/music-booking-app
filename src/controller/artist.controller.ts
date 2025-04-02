@@ -9,11 +9,16 @@ import {
 } from '../validator/artist.validator';
 import { validate } from '../helper/validator.helper';
 import { IRequest } from '../interface/request.interface';
+import { EventService } from '../service/event.service';
+import { objectIdValidator } from '../validator/common.validator';
 
 @Service()
 @Controller()
 export class ArtistController {
-  constructor(private readonly artistService: ArtistService) {}
+  constructor(
+    private readonly artistService: ArtistService,
+    private readonly eventService: EventService
+  ) {}
 
   async getProfile(req: IRequest, res: Response) {
     const profile = await this.artistService.getProfile(req.auth.id);
@@ -39,6 +44,16 @@ export class ArtistController {
       req.auth.id,
       artistData
     );
+
+    ResponseHandler.ok(res, profile);
+  }
+
+  async getArtistEvents(req: IRequest, res: Response) {
+    const { id } = await validate(objectIdValidator, { id: req.params.id });
+
+    const profile = await this.eventService.allEvents({
+      artists: { $in: [id] },
+    });
 
     ResponseHandler.ok(res, profile);
   }

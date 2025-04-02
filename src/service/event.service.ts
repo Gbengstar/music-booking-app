@@ -46,8 +46,10 @@ export class EventService {
     return updatedEvent;
   }
 
-  allEvents() {
-    return EventModel.find({ deleted: false }).populate(this.populateEventData);
+  allEvents(filter: FilterQuery<IEvent> = {}) {
+    return EventModel.find({ ...filter, deleted: false }).populate(
+      this.populateEventData
+    );
   }
 
   async findOneOrFail(filter: FilterQuery<IEvent>) {

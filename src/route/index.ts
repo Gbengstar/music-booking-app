@@ -8,7 +8,7 @@ import { bookingRouter } from './booking.route';
 
 const router = Router();
 
-router.use('/account', accountRouter);
+router.use('/accounts', accountRouter);
 router.use(authenticate);
 router.use('/artists', artistRouter);
 router.use('/events', eventRouter);

@@ -18,4 +18,6 @@ router
   .route('/:id')
   .delete(authorizeRoles(RolesEnum.ADMIN), venueController.deleteVenue);
 
+router.route('/:id/events').get(venueController.venusEvents);
+
 export const venueRouter = router;

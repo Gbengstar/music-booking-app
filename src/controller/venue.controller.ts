@@ -15,7 +15,10 @@ import { objectIdValidator } from '../validator/common.validator';
 @Service()
 @Controller()
 export class VenueController {
-  constructor(private readonly venueService: VenueService) {}
+  constructor(
+    private readonly venueService: VenueService,
+    private readonly eventService: EventService
+  ) {}
 
   async createVenue(req: IRequest, res: Response) {
     const venue = await validate(createVenueValidator, req.body);
@@ -44,5 +47,14 @@ export class VenueController {
     await this.venueService.updateVenueData(id, { deleted: true });
 
     ResponseHandler.ok(res, true);
+  }
+
+  async venusEvents(req: Request, res: Response) {
+    const { id } = await validate(objectIdValidator, {
+      id: req.params.id,
+    });
+    const events = await this.eventService.allEvents({ venue: id });
+
+    ResponseHandler.ok(res, events);
   }
 }

@@ -9,6 +9,7 @@ import {
   createBookingValidator,
   filterBookingValidator,
 } from '../validator/booking.validator';
+import { objectIdValidator } from '../validator/common.validator';
 
 @Service()
 @Controller()
@@ -28,6 +29,16 @@ export class BookingController {
     );
 
     ResponseHandler.ok(res, booking);
+  }
+
+  async cancelBooking(req: IRequest, res: Response) {
+    const { id } = await validate(objectIdValidator, { id: req.params.id });
+    const cancelledBooking = await this.bookingService.cancelBooking(
+      req.auth.id,
+      id
+    );
+
+    ResponseHandler.ok(res, cancelledBooking);
   }
 
   async myBookings(req: IRequest, res: Response) {
